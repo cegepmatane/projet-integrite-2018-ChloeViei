@@ -12,6 +12,7 @@ public class VuePays extends Scene {
     protected Label valeurContinent;
     protected Label valeurPopulation;
     protected Label valeurLangue;
+    protected Label valeurCapital;
 
     public VuePays() {
         super(new Pane(),400,400);
@@ -34,6 +35,10 @@ public class VuePays extends Scene {
         grillePays.add(new Label("Langue : "), 0, 3);
         grillePays.add(valeurLangue, 1, 3);
 
+        valeurCapital = new Label("");
+        grillePays.add(new Label("Capital : "), 0, 3);
+        grillePays.add(valeurCapital, 1, 3);
+
         panneau.getChildren().add(grillePays);
     }
 
@@ -43,5 +48,6 @@ public class VuePays extends Scene {
         this.valeurContinent.setText(pays.getContinent());
         this.valeurPopulation.setText(pays.getPopulation());
         this.valeurLangue.setText(pays.getLangue());
+        this.valeurCapital.setText(pays.getCapital());
     }
 }

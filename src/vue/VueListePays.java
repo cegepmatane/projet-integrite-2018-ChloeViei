@@ -24,12 +24,15 @@ public class VueListePays extends Scene {
     {
         int numero = 0;
         this.grillePays.add(new Label("Nom"), 0, numero);
-        this.grillePays.add(new Label("Langue"), 1, numero);
+        this.grillePays.add(new Label("Capital"), 1, numero);
+        this.grillePays.add(new Label("Langue"), 2, numero);
+
         for(Pays pays : grillePays)
         {
             numero++;
             this.grillePays.add(new Label(pays.getNom()), 0, numero);
-            this.grillePays.add(new Label(pays.getLangue()), 1, numero);
+            this.grillePays.add(new Label(pays.getCapital()), 1, numero);
+            this.grillePays.add(new Label(pays.getLangue()), 2, numero);
         }
     }
 }

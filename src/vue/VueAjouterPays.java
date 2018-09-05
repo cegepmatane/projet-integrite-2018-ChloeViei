@@ -14,6 +14,7 @@ public class VueAjouterPays extends Scene {
     protected TextField valeurContinent;
     protected TextField valeurPopulation;
     protected TextField valeurLangue;
+    protected TextField valeurCapital;
 
 
     public VueAjouterPays()  {
@@ -37,6 +38,10 @@ public class VueAjouterPays extends Scene {
         grillePays.add(new Label("Langue : "), 0, 3);
         grillePays.add(valeurLangue, 1, 3);
 
+        valeurCapital = new TextField("");
+        grillePays.add(new Label("Capital : "), 0, 3);
+        grillePays.add(valeurCapital, 1, 3);
+
         panneau.getChildren().add(new Label("Ajouter un Pays"));
         panneau.getChildren().add(grillePays);
         panneau.getChildren().add(new Button("Enregistrer"));
@@ -47,7 +52,8 @@ public class VueAjouterPays extends Scene {
         Pays pays = new Pays(this.valeurNom.getText(),
                 this.valeurContinent.getText(),
                 this.valeurPopulation.getText(),
-                this.valeurLangue.getText());
+                this.valeurLangue.getText(),
+                this.valeurCapital.getText());
         return pays;
     }
 }

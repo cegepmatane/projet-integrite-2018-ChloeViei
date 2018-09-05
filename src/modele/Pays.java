@@ -6,6 +6,7 @@ public class Pays {
     protected String continent;
     protected String population;
     protected String langue;
+    protected String capital;
 
     public Pays(String nom) {
         super();
@@ -22,12 +23,13 @@ public class Pays {
         this.continent = continent;
         this.population = population;
     }
-    public Pays(String nom, String continent, String population, String langue) {
+    public Pays(String nom, String continent, String population, String langue, String capital) {
         super();
         this.nom = nom;
         this.continent = continent;
         this.population = population;
         this.langue = langue;
+        this.capital = capital;
     }
     public String getNom() {
         return nom;
@@ -59,6 +61,14 @@ public class Pays {
 
     public void setLangue(String langue) {
         this.langue = langue;
+    }
+
+    public String getCapital() {
+        return capital;
+    }
+
+    public void setCapital(String capital) {
+        this.capital = capital;
     }
 
 }
