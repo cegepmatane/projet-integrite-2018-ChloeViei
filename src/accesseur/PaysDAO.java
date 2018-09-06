@@ -33,6 +33,8 @@ public class PaysDAO {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        
+        List<Pays> listePays = new ArrayList<Pays>();
 
         try {
 			Connection connection = DriverManager.getConnection(BASEDEDONNEES_URL, BASEDEDONNEES_USAGER, BASEDEDONNEES_MOTDEPASSE);
@@ -46,9 +48,12 @@ public class PaysDAO {
                 String continent = curseurListePays.getString("continent");
                 String population = curseurListePays.getString("population");
                 String langue = curseurListePays.getString("langue");
-                String capitale = curseurListePays.getString("capital");
+                String capital = curseurListePays.getString("capital");
+                
+                System.out.println("Pays : " + nom + " en  " + continent + "\n" + "Peuplé de : " + population + " parle le : " + langue + " et la capital est : " + capital);
 
-                System.out.println("Pays : " + nom );
+                Pays pays = new Pays(nom,continent,population,langue,capital);
+                listePays.add(pays);
 
             }
 
@@ -57,6 +62,6 @@ public class PaysDAO {
             e.printStackTrace();
         }
 
-        return this.simulerListerPays();
+        return listePays;
     }
 }
