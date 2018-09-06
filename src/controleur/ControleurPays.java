@@ -15,10 +15,13 @@ public class ControleurPays {
     private VueAjouterPays vueAjouterPays = null;
     private VueListePays vueListePays = null;
     private VuePays vuePays = null;
+    
+    PaysDAO paysDAO = null;
 
     private ControleurPays()
     {
         System.out.println("Initialisation de controleur");
+        this.paysDAO = new PaysDAO();
     }
 
     public void activerVues(NavigateurDesVues navigateur)
@@ -34,15 +37,13 @@ public class ControleurPays {
 
 
         /// TEST ///
-
-        PaysDAO moutonDAO = new PaysDAO();
-        List<Pays> listePaysTest = moutonDAO.listerPays();
+        List<Pays> listePaysTest = paysDAO.listerPays();
         this.vueListePays.afficherListePays(listePaysTest);
 
 
         this.navigateur.naviguerVersVuePays();
         this.navigateur.naviguerVersVueListePays();
-//		this.navigateur.naviguerVersVueAjouterPays();
+		this.navigateur.naviguerVersVueAjouterPays();
     }
 
     // SINGLETON DEBUT
@@ -53,5 +54,13 @@ public class ControleurPays {
         return instance;
     }
     // SINGLETON FINI
+    
+    
+    public void notifierEnregistrementPays() {
+    	
+    	System.out.println("ControleurPays.notifierEnregistrementPays()");
+    	Pays pays = this.navigateur.getVueAjouterPays().demanderPays();
+    	this.navigateur.naviguerVersVueAjouterPays();
+    }
 
 }

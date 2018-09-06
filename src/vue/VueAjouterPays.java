@@ -1,6 +1,8 @@
 package vue;
 
 import controleur.ControleurPays;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,12 +20,25 @@ public class VueAjouterPays extends Scene {
     protected TextField valeurCapital;
     
     private ControleurPays controleur = null;
+    protected Button actionEnregistrerPays = null;
 
 
-    public VueAjouterPays()  {
+    public VueAjouterPays()  
+    {
         super(new VBox(), 400, 400);
         VBox panneau = (VBox) this.getRoot();
         GridPane grillePays = new GridPane();
+        this.actionEnregistrerPays = new Button("Enregistrer");
+        
+        this.actionEnregistrerPays.setOnAction(new EventHandler<ActionEvent>()
+        {
+        	@Override
+			public void handle(ActionEvent arg0) {
+				
+				controleur.notifierEnregistrementPays();
+				
+        	}
+        });
 
         valeurNom = new TextField();
         grillePays.add(new Label("Nom : "), 0, 0);
@@ -42,12 +57,12 @@ public class VueAjouterPays extends Scene {
         grillePays.add(valeurLangue, 1, 3);
 
         valeurCapital = new TextField("");
-        grillePays.add(new Label("Capital : "), 0, 3);
-        grillePays.add(valeurCapital, 1, 3);
+        grillePays.add(new Label("Capital : "), 0, 4);
+        grillePays.add(valeurCapital, 1, 4);
 
         panneau.getChildren().add(new Label("Ajouter un Pays"));
         panneau.getChildren().add(grillePays);
-        panneau.getChildren().add(new Button("Enregistrer"));
+        panneau.getChildren().add(this.actionEnregistrerPays);
     }
 
     public Pays demanderPays()
