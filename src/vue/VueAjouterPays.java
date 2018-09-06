@@ -1,5 +1,6 @@
 package vue;
 
+import controleur.ControleurPays;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,6 +16,8 @@ public class VueAjouterPays extends Scene {
     protected TextField valeurPopulation;
     protected TextField valeurLangue;
     protected TextField valeurCapital;
+    
+    private ControleurPays controleur = null;
 
 
     public VueAjouterPays()  {
@@ -55,5 +58,10 @@ public class VueAjouterPays extends Scene {
                 this.valeurLangue.getText(),
                 this.valeurCapital.getText());
         return pays;
+    }
+    
+    public void setControleur(ControleurPays controleur) {
+    	
+    	this.controleur = controleur;
     }
 }

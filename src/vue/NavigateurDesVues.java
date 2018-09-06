@@ -24,12 +24,16 @@ public class NavigateurDesVues extends Application{
 
 	@Override
 	public void start(Stage stade) throws Exception {
+		
 		this.stade = stade;
-		this.stade.setScene(this.vueListePays);
+		this.stade.setScene(null);
 		this.stade.show();
 
 		this.controleur = ControleurPays.getInstance();
 		this.controleur.activerVues(this);
+		this.vueAjouterPays.setControleur(controleur);
+		this.vueListePays.setControleur(controleur);
+		this.vuePays.setControleur(controleur);
 	}
 
 	public VueAjouterPays getVueAjouterPays() {

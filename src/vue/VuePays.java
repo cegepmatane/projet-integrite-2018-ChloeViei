@@ -1,5 +1,6 @@
 package vue;
 
+import controleur.ControleurPays;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -13,6 +14,8 @@ public class VuePays extends Scene {
     protected Label valeurPopulation;
     protected Label valeurLangue;
     protected Label valeurCapital;
+    
+    private ControleurPays controleur = null;	
 
     public VuePays() {
         super(new Pane(),400,400);
@@ -50,4 +53,8 @@ public class VuePays extends Scene {
         this.valeurLangue.setText(pays.getLangue());
         this.valeurCapital.setText(pays.getCapital());
     }
+    
+    public void setControleur(ControleurPays controleur) {
+		this.controleur = controleur;
+	}
 }
