@@ -18,28 +18,40 @@ public class PaysDAO {
 
         return listePaysTest;
     }
+    
+    private static String BASEDEDONNEES_DRIVER = "org.postgresql.Driver";
+    private static String BASEDEDONNEES_URL = "jdbc:postgresql://localhost:5432/lieuDecouvrir";
+    private static String BASEDEDONNEES_USAGER = "postgres";
+    private static String BASEDEDONNEES_MOTDEPASSE = "root";
+    private Connection connection = null;
 
     
-	public List<Pays> listerPays(){
-		
-		String BASEDEDONNEES_DRIVER = "org.postgresql.Driver";
-		String BASEDEDONNEES_URL = "jdbc:postgresql://localhost:5432/lieuDecouvrir";
-		String BASEDEDONNEES_USAGER = "postgres";
-		String BASEDEDONNEES_MOTDEPASSE = "root";
-
+	public PaysDAO(){
 
         try {
             Class.forName(BASEDEDONNEES_DRIVER);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        
-        List<Pays> listePays = new ArrayList<Pays>();
+   
 
         try {
-			Connection connection = DriverManager.getConnection(BASEDEDONNEES_URL, BASEDEDONNEES_USAGER, BASEDEDONNEES_MOTDEPASSE);
+        	
+			connection = DriverManager.getConnection(BASEDEDONNEES_URL, BASEDEDONNEES_USAGER, BASEDEDONNEES_MOTDEPASSE);
 
-            Statement requeteListePays = connection.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+	
+	public List<Pays> listerPays(){
+		
+		List<Pays> listePays = new ArrayList<Pays>();
+		Statement requeteListePays;
+		
+		try {
+        	requeteListePays = connection.createStatement();
             ResultSet curseurListePays = requeteListePays.executeQuery("SELECT * FROM pays");
 
             while (curseurListePays.next()){
@@ -61,7 +73,10 @@ public class PaysDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return listePays;
-    }
+		
+		return listePays;
+		
+	}
+	
+	
 }
