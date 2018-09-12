@@ -71,5 +71,12 @@ public class ControleurPays {
     	System.out.println("ControleurPays.notifierNaviguerAjouterPays()");
     	this.navigateur.naviguerVersVueAjouterPays();
     }
+    
+    public void notifierNaviguerEditerPays()
+	{
+		System.out.println("ControleurPays.notifierEditerPays()");
+		this.navigateur.naviguerVersVueEditerPays();
+		
+	}
 
 }

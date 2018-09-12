@@ -9,6 +9,7 @@ public class NavigateurDesVues extends Application{
 	private Stage stade;
 
 	private VueAjouterPays vueAjouterPays = null;
+	private VueEditerPays vueEditerPays = null;
 	private VueListePays vueListePays = null;
 	private VuePays vuePays = null;
 
@@ -19,6 +20,7 @@ public class NavigateurDesVues extends Application{
 		this.vueAjouterPays = new VueAjouterPays();
 		this.vueListePays = new VueListePays();
 		this.vuePays = new VuePays();
+		this.vueEditerPays = new VueEditerPays();
 	}
 
 
@@ -34,10 +36,15 @@ public class NavigateurDesVues extends Application{
 		this.vueAjouterPays.setControleur(controleur);
 		this.vueListePays.setControleur(controleur);
 		this.vuePays.setControleur(controleur);
+		this.vueEditerPays.setControleur(controleur);
 	}
 
 	public VueAjouterPays getVueAjouterPays() {
 		return vueAjouterPays;
+	}
+
+	public VueEditerPays getVueEditerPays(){
+		return this.vueEditerPays;
 	}
 
 	public VueListePays getVueListePays() {
@@ -62,6 +69,12 @@ public class NavigateurDesVues extends Application{
 	public void naviguerVersVueAjouterPays()
 	{
 		stade.setScene(this.vueAjouterPays);
+		stade.show();
+	}
+
+	public void naviguerVersVueEditerPays()
+	{
+		stade.setScene(this.vueEditerPays);
 		stade.show();
 	}
 

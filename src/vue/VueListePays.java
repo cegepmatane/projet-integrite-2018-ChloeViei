@@ -6,7 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import modele.Pays;
 
 import java.util.List;
@@ -35,11 +34,20 @@ public class VueListePays extends Scene {
 
         for(Pays pays : grillePays)
         {
+
+            Button actionEditerPays = new Button("Editer");
+            actionEditerPays.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    controleur.notifierNaviguerEditerPays();
+                }
+            });
+
             numero++;
             this.grillePays.add(new Label(pays.getNom()), 0, numero);
             this.grillePays.add(new Label(pays.getCapital()), 1, numero);
             this.grillePays.add(new Label(pays.getLangue()), 2, numero);
-            this.grillePays.add(new Button("Editer"), 3, numero);
+            this.grillePays.add(actionEditerPays, 3, numero);
         }
         
         this.actionNaviguerAjouterPays.setOnAction(new EventHandler<ActionEvent>()
