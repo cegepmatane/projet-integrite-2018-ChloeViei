@@ -60,6 +60,7 @@ public class ControleurPays {
     	
     	System.out.println("ControleurPays.notifierEnregistrementPays()");
     	Pays pays = this.navigateur.getVueAjouterPays().demanderPays();
+    	this.paysDAO.ajouterPays(pays);
     	this.navigateur.naviguerVersVueAjouterPays();
     }
 
