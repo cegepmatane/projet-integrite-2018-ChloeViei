@@ -1,5 +1,7 @@
 package vue;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,13 +17,13 @@ public class VueListePays extends Scene {
 
     protected GridPane grillePays;
     private ControleurPays controleur = null;
+    private Button actionNaviguerAjouterPays;
 
-    public VueListePays() {
-        super(new Pane(), 400,400);
-        Pane panneau = (Pane) this.getRoot();
-        grillePays = new GridPane();
-
-        panneau.getChildren().add(grillePays);
+    public VueListePays() 
+    {
+        super(new GridPane(), 400,400);
+        grillePays = (GridPane) this.getRoot();
+        this.actionNaviguerAjouterPays = new Button("Ajouter un pays");
     }
 
     public void afficherListePays(List<Pays> grillePays)
@@ -39,6 +41,15 @@ public class VueListePays extends Scene {
             this.grillePays.add(new Label(pays.getLangue()), 2, numero);
             this.grillePays.add(new Button("Editer"), 3, numero);
         }
+        
+        this.actionNaviguerAjouterPays.setOnAction(new EventHandler<ActionEvent>()
+        {
+        	@Override
+			public void handle(ActionEvent arg0) {
+				controleur.notifierNaviguerAjouterPays();
+			}	
+        });
+        this.grillePays.add(this.actionNaviguerAjouterPays, 1, ++numero);
     }
     
     public void setControleur(ControleurPays controleur) {

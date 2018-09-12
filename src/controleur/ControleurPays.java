@@ -43,7 +43,7 @@ public class ControleurPays {
 
         this.navigateur.naviguerVersVuePays();
         this.navigateur.naviguerVersVueListePays();
-		this.navigateur.naviguerVersVueAjouterPays();
+		//this.navigateur.naviguerVersVueAjouterPays();
     }
 
     // SINGLETON DEBUT
@@ -56,11 +56,19 @@ public class ControleurPays {
     // SINGLETON FINI
     
     
-    public void notifierEnregistrementPays() {
-    	
+    public void notifierEnregistrementPays() 
+    {
     	System.out.println("ControleurPays.notifierEnregistrementPays()");
     	Pays pays = this.navigateur.getVueAjouterPays().demanderPays();
     	this.paysDAO.ajouterPays(pays);
+    	this.vueListePays.afficherListePays(this.paysDAO.listerPays());
+    	this.navigateur.naviguerVersVueAjouterPays();
+    }
+    
+    public void notifierNaviguerAjouterPays() 
+    {
+    	// envoie juste un message à la console pour tester le bon fonctionnement de tout
+    	System.out.println("ControleurPays.notifierNaviguerAjouterPays()");
     	this.navigateur.naviguerVersVueAjouterPays();
     }
 
