@@ -27,6 +27,8 @@ public class VueListePays extends Scene {
 
     public void afficherListePays(List<Pays> grillePays)
     {
+    	this.grillePays.getChildren().clear();
+    	
         int numero = 0;
         this.grillePays.add(new Label("Nom"), 0, numero);
         this.grillePays.add(new Label("Capital"), 1, numero);
@@ -34,12 +36,11 @@ public class VueListePays extends Scene {
 
         for(Pays pays : grillePays)
         {
-
             Button actionEditerPays = new Button("Editer");
             actionEditerPays.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    controleur.notifierNaviguerEditerPays();
+                    controleur.notifierNaviguerEditerPays(pays.getId());
                 }
             });
 

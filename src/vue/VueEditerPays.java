@@ -18,6 +18,7 @@ public class VueEditerPays extends Scene {
     protected TextField valeurPopulation;
     protected TextField valeurLangue;
     protected TextField valeurCapital;
+    private int idPays = 0;
     
     private ControleurPays controleur = null;
     protected Button actionEnregistrerPays = null;
@@ -34,9 +35,7 @@ public class VueEditerPays extends Scene {
         {
         	@Override
 			public void handle(ActionEvent arg0) {
-				
 				controleur.notifierEnregistrementPays();
-				
         	}
         });
 
@@ -60,7 +59,7 @@ public class VueEditerPays extends Scene {
         grillePays.add(new Label("Capital : "), 0, 4);
         grillePays.add(valeurCapital, 1, 4);
 
-        panneau.getChildren().add(new Label("Ajouter un Pays"));
+        panneau.getChildren().add(new Label("Editer un Pays"));
         panneau.getChildren().add(grillePays);
         panneau.getChildren().add(this.actionEnregistrerPays);
     }
@@ -72,11 +71,22 @@ public class VueEditerPays extends Scene {
                 this.valeurPopulation.getText(),
                 this.valeurLangue.getText(),
                 this.valeurCapital.getText());
+        pays.setId(idPays);
         return pays;
     }
     
-    public void setControleur(ControleurPays controleur) {
-    	
+    public void afficherPays(Pays pays) 
+    {
+        this.idPays = pays.getId();
+    	this.valeurNom.setText(pays.getNom());
+    	this.valeurContinent.setText(pays.getContinent());
+    	this.valeurPopulation.setText(pays.getPopulation());
+    	this.valeurLangue.setText(pays.getLangue());
+    	this.valeurCapital.setText(pays.getCapital());
+    }
+    
+    public void setControleur(ControleurPays controleur) 
+    {
     	this.controleur = controleur;
     }
 }

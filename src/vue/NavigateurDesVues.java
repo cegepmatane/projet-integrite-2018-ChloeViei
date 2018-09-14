@@ -12,9 +12,9 @@ public class NavigateurDesVues extends Application{
 	private VueEditerPays vueEditerPays = null;
 	private VueListePays vueListePays = null;
 	private VuePays vuePays = null;
-
 	private ControleurPays controleur = null;
 
+	
 	public NavigateurDesVues()
 	{
 		this.vueAjouterPays = new VueAjouterPays();

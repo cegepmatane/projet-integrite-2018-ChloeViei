@@ -2,6 +2,7 @@ package modele;
 
 public class Pays {
 
+	protected int id;
     protected String nom;
     protected String continent;
     protected String population;
@@ -69,6 +70,14 @@ public class Pays {
 
     public void setCapital(String capital) {
         this.capital = capital;
+    }
+    
+    public void setId(int id) {
+    	this.id = id;
+    }
+    
+    public int getId() {
+    	return id;
     }
 
 }

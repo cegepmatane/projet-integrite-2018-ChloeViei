@@ -34,9 +34,7 @@ public class VueAjouterPays extends Scene {
         {
         	@Override
 			public void handle(ActionEvent arg0) {
-				
-				controleur.notifierEnregistrementPays();
-				
+				controleur.notifierEnregistrementNouveauPays();
         	}
         });
 

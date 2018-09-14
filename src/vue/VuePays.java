@@ -18,9 +18,8 @@ public class VuePays extends Scene {
     private ControleurPays controleur = null;	
 
     public VuePays() {
-        super(new Pane(),400,400);
-        Pane panneau = (Pane) this.getRoot();
-        GridPane grillePays = new GridPane();
+        super(new GridPane(),400,400);
+        GridPane grillePays = (GridPane) this.getRoot();
 
         valeurNom = new Label("");
         grillePays.add(new Label("Nom : "), 0, 0);
@@ -42,7 +41,6 @@ public class VuePays extends Scene {
         grillePays.add(new Label("Capital : "), 0, 3);
         grillePays.add(valeurCapital, 1, 3);
 
-        panneau.getChildren().add(grillePays);
     }
 
     public void afficherPays(Pays pays)
