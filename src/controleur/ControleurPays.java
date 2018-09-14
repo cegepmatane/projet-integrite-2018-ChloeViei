@@ -53,7 +53,7 @@ public class ControleurPays {
         
 
 		
-		this.vueEditerPays.afficherListeLieu(this.lieuDAO.simulerListeLieu());     
+		//this.vueEditerPays.afficherListeLieu(this.lieuDAO.listerLieu());     
         
     }
 
@@ -96,8 +96,9 @@ public class ControleurPays {
     public void notifierNaviguerEditerPays(int idPays)
 	{
 		System.out.println("ControleurPays.notifierEditerPays("+ idPays +")");
-		//Pays paysTest = new Pays("Allemagne","Europe","90 miilions","Allemand","Berlin");
+		//Pays paysTest = new Pays("Allemagne","Europe","90 millions","Allemand","Berlin");
 		this.vueEditerPays.afficherPays(this.paysDAO.rapporterPays(idPays));
+		this.vueEditerPays.afficherListeLieu(this.lieuDAO.listerLieu(idPays));     
 		this.navigateur.naviguerVersVueEditerPays();
 		
 	}
