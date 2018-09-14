@@ -98,7 +98,7 @@ public class ControleurPays {
 		System.out.println("ControleurPays.notifierEditerPays("+ idPays +")");
 		//Pays paysTest = new Pays("Allemagne","Europe","90 millions","Allemand","Berlin");
 		this.vueEditerPays.afficherPays(this.paysDAO.rapporterPays(idPays));
-		this.vueEditerPays.afficherListeLieu(this.lieuDAO.listerLieu(idPays));     
+		this.vueEditerPays.afficherListeLieu(this.lieuDAO.listerLieuParPays(idPays));     
 		this.navigateur.naviguerVersVueEditerPays();
 		
 	}

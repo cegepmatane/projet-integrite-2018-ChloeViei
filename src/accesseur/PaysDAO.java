@@ -72,7 +72,8 @@ public class PaysDAO {
 	{
 		System.out.println("PaysDAO.modifierPays()");
 		
-		try {
+		try 
+		{
 			Statement requeteModifierPays = connexion.createStatement();
 			String SQL_MODIFIER_PAYS = "UPDATE pays SET nom = '"+ pays.getNom()+"', continent = '"+ pays.getContinent()+"', population = '"+ pays.getPopulation()+"', langue = '"+ pays.getLangue()+"', capital = '"+ pays.getCapital()+"' WHERE id = " + pays.getId();
 			System.out.println("SQL : " + SQL_MODIFIER_PAYS);
@@ -85,13 +86,15 @@ public class PaysDAO {
 	
 	public Pays rapporterPays(int idPays)
 	{
-		Statement requetePays;
- 		try {
- 			requetePays = connexion.createStatement();
+		PreparedStatement requetePays;
+ 		try 
+ 		{ 	
+ 			String SQL_RAPPORTER_PAYS = "SELECT * FROM pays WHERE id = ?";
+			requetePays = connexion.prepareStatement(SQL_RAPPORTER_PAYS);
+			requetePays.setInt(1, idPays);
  			
- 			String SQL_RAPPORTER_PAYS = "SELECT * FROM pays WHERE id = " + idPays;
  			System.out.println(SQL_RAPPORTER_PAYS);
- 			ResultSet curseurPays = requetePays.executeQuery(SQL_RAPPORTER_PAYS);
+ 			ResultSet curseurPays = requetePays.executeQuery();
  			
  			curseurPays.next();
  			int id = curseurPays.getInt("id");

@@ -20,7 +20,7 @@ public class LieuDAO {
 		this.connexion = BaseDeDonnees.getInstance().getConnection();
 	}
  	
- 	public List<Lieu> listerLieu(int idPays)
+ 	public List<Lieu> listerLieuParPays(int idPays)
  	{
  		System.out.println("LieuDAO.listerLieu()");
 		List<Lieu> listeLieu =  new ArrayList<Lieu>();			
