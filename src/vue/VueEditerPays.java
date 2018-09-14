@@ -63,32 +63,7 @@ public class VueEditerPays extends Scene {
         valeurCapital = new TextField("");
         grillePays.add(new Label("Capital : "), 0, 4);
         grillePays.add(valeurCapital, 1, 4);
-        
-        
-        //this.grilleListeLieu.add(new Label("Lieu 1"), 0, 0);
-        //this.grilleListeLieu.add(new Label("Lieu 2"), 0, 1);
-        //this.grilleListeLieu.add(new Label("Lieu 3"), 0, 2);
-        //this.grilleListeLieu.add(new Label("Lieu 4"), 0, 3);  
-        
-        List<Lieu> listeLieux = new ArrayList<Lieu>();
-        Lieu lieu;
-        lieu = new Lieu("Plitvice", "Lacs dans le parc national");
-		listeLieux.add(lieu);
-		lieu = new Lieu("Nishinomaru Garden", "Jardin style japonnais");
-		listeLieux.add(lieu);
-		lieu = new Lieu("Bora Bora", "Ile paradisiaque");
-		listeLieux.add(lieu);
 		
- 		int numero = 0;
-		for(Lieu i : listeLieux)
-		{
-			this.grilleListeLieu.add(new Label(i.getNom() + ""), 0, numero);
-			this.grilleListeLieu.add(new Label(i.getType()), 1, numero);
-			this.grilleListeLieu.add(new Button("Éditer"), 2, numero);
-			this.grilleListeLieu.add(new Button("Effacer"), 3, numero);
-			numero++;
-		}
-        
 
         panneau.getChildren().add(new Label("Editer un Pays"));
         panneau.getChildren().add(grillePays);
@@ -116,6 +91,20 @@ public class VueEditerPays extends Scene {
     	this.valeurLangue.setText(pays.getLangue());
     	this.valeurCapital.setText(pays.getCapital());
     }
+    
+    public void afficherListeLieu(List<Lieu> listeLieux)
+	{
+		int numero = 0;
+		for(Lieu lieu : listeLieux)
+		{
+			this.grilleListeLieu.add(new Label(lieu.getNom() + ""), 0, numero);
+			this.grilleListeLieu.add(new Label(lieu.getType()), 1, numero);
+			this.grilleListeLieu.add(new Button("Éditer"), 2, numero);
+			this.grilleListeLieu.add(new Button("Effacer"), 3, numero);
+			
+			numero ++;
+		}		
+	}
     
     public void setControleur(ControleurPays controleur) 
     {

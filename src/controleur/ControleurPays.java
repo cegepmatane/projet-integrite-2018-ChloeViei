@@ -1,6 +1,8 @@
 package controleur;
 
+import accesseur.LieuDAO;
 import accesseur.PaysDAO;
+import modele.Lieu;
 import modele.Pays;
 import vue.NavigateurDesVues;
 import vue.VueAjouterPays;
@@ -8,6 +10,7 @@ import vue.VueEditerPays;
 import vue.VueListePays;
 import vue.VuePays;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ControleurPays {
@@ -18,11 +21,13 @@ public class ControleurPays {
     private VuePays vuePays = null;
     private VueEditerPays vueEditerPays = null;
     private PaysDAO paysDAO = null;
+    private LieuDAO lieuDAO = null;
 
     private ControleurPays()
     {
         System.out.println("Initialisation de controleur");
         this.paysDAO = new PaysDAO();
+        lieuDAO = new LieuDAO();
     }
 
     public void activerVues(NavigateurDesVues navigateur)
@@ -45,6 +50,11 @@ public class ControleurPays {
        
         this.navigateur.naviguerVersVueListePays();
 		//this.navigateur.naviguerVersVueAjouterPays();
+        
+
+		
+		this.vueEditerPays.afficherListeLieu(this.lieuDAO.simulerListeLieu());     
+        
     }
 
     // SINGLETON DEBUT
