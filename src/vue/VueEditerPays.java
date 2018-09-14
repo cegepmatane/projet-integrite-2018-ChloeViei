@@ -1,5 +1,8 @@
 package vue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import controleur.ControleurPays;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import modele.Lieu;
 import modele.Pays;
 
 public class VueEditerPays extends Scene {
@@ -22,6 +26,7 @@ public class VueEditerPays extends Scene {
     
     private ControleurPays controleur = null;
     protected Button actionEnregistrerPays = null;
+    protected GridPane grilleListeLieu = new GridPane();
 
 
     public VueEditerPays()  
@@ -58,10 +63,37 @@ public class VueEditerPays extends Scene {
         valeurCapital = new TextField("");
         grillePays.add(new Label("Capital : "), 0, 4);
         grillePays.add(valeurCapital, 1, 4);
+        
+        
+        //this.grilleListeLieu.add(new Label("Lieu 1"), 0, 0);
+        //this.grilleListeLieu.add(new Label("Lieu 2"), 0, 1);
+        //this.grilleListeLieu.add(new Label("Lieu 3"), 0, 2);
+        //this.grilleListeLieu.add(new Label("Lieu 4"), 0, 3);  
+        
+        List<Lieu> listeLieux = new ArrayList<Lieu>();
+        Lieu lieu;
+        lieu = new Lieu("Plitvice", "Lacs dans le parc national");
+		listeLieux.add(lieu);
+		lieu = new Lieu("Nishinomaru Garden", "Jardin style japonnais");
+		listeLieux.add(lieu);
+		lieu = new Lieu("Bora Bora", "Ile paradisiaque");
+		listeLieux.add(lieu);
+		
+ 		int numero = 0;
+		for(Lieu i : listeLieux)
+		{
+			this.grilleListeLieu.add(new Label(i.getNom() + ""), 0, numero);
+			this.grilleListeLieu.add(new Label(i.getType()), 1, numero);
+			this.grilleListeLieu.add(new Button("Éditer"), 2, numero);
+			this.grilleListeLieu.add(new Button("Effacer"), 3, numero);
+			numero++;
+		}
+        
 
         panneau.getChildren().add(new Label("Editer un Pays"));
         panneau.getChildren().add(grillePays);
         panneau.getChildren().add(this.actionEnregistrerPays);
+        panneau.getChildren().add(grilleListeLieu);
     }
 
     public Pays demanderPays()
