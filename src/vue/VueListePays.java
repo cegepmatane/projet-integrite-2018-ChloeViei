@@ -20,7 +20,7 @@ public class VueListePays extends Scene {
 
     public VueListePays() 
     {
-        super(new GridPane(), 400,400);
+        super(new GridPane(), 400,500);
         grillePays = (GridPane) this.getRoot();
         this.actionNaviguerAjouterPays = new Button("Ajouter un pays");
     }

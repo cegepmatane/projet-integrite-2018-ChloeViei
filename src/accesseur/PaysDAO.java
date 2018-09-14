@@ -56,11 +56,17 @@ public class PaysDAO {
 	{
 		System.out.println("PaysDAO.ajouterPays()");
 		try {
-			Statement requeteAjouterPays = connexion.createStatement();
+			String SQL_AJOUTER_PAYS = "INSERT INTO pays(nom, continent, population, langue, capital) VALUES(?,?,?,?,?)";
 			
-			String sqlAjouterPays = "INSERT INTO pays(nom, continent, population, langue, capital) VALUES('"+ pays.getNom()+"','"+ pays.getContinent()+"','"+ pays.getPopulation()+"','"+ pays.getLangue()+"','"+ pays.getCapital()+"')";
-			System.out.println("SQL : " + sqlAjouterPays);
-			requeteAjouterPays.execute(sqlAjouterPays);
+			PreparedStatement requeteAjouterPays = connexion.prepareStatement(SQL_AJOUTER_PAYS);
+			requeteAjouterPays.setString(1, pays.getNom());
+			requeteAjouterPays.setString(2, pays.getContinent());
+			requeteAjouterPays.setString(3, pays.getPopulation());
+			requeteAjouterPays.setString(4, pays.getLangue());
+			requeteAjouterPays.setString(5, pays.getCapital());
+			
+			System.out.println("SQL : " + SQL_AJOUTER_PAYS);
+			requeteAjouterPays.execute();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
