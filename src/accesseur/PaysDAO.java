@@ -7,41 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PaysDAO {
-
-    public List<Pays> simulerListerPays()
-    {
-        List listePaysTest = new ArrayList<Pays>();
-        listePaysTest.add(new Pays("France", "Europe", "67 millions", "Francais", "Paris"));
-        listePaysTest.add(new Pays("Japon", "Asie", "35 millions", "Japonnais", "Tokyo"));
-        listePaysTest.add(new Pays("Canada", "Amerique", "20 millions", "Anglais/Francais", "Ottawa"));
-        listePaysTest.add(new Pays("Grece", "Europe", "10 millions", "Grec", "Athene"));
-        return listePaysTest;
-    }
+	
+	private Connection connexion = null;
     
-    private static String BASEDEDONNEES_DRIVER = "org.postgresql.Driver";
-    private static String BASEDEDONNEES_URL = "jdbc:postgresql://localhost:5432/lieuDecouvrir";
-    private static String BASEDEDONNEES_USAGER = "postgres";
-    private static String BASEDEDONNEES_MOTDEPASSE = "root";
-    private Connection connection = null;
-
-    
-	public PaysDAO(){
-
-        try {
-            Class.forName(BASEDEDONNEES_DRIVER);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-   
-
-        try {
-			connection = DriverManager.getConnection(BASEDEDONNEES_URL, BASEDEDONNEES_USAGER, BASEDEDONNEES_MOTDEPASSE);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+	public PaysDAO()
+	{
+        this.connexion = BaseDeDonnees.getInstance().getConnection();
     }
+	
 	
 	public List<Pays> listerPays(){
 		
@@ -49,7 +22,7 @@ public class PaysDAO {
 		Statement requeteListePays;
 		
 		try {
-        	requeteListePays = connection.createStatement();
+        	requeteListePays = connexion.createStatement();
             ResultSet curseurListePays = requeteListePays.executeQuery("SELECT * FROM pays");
 
             while (curseurListePays.next())
@@ -83,7 +56,7 @@ public class PaysDAO {
 	{
 		System.out.println("PaysDAO.ajouterPays()");
 		try {
-			Statement requeteAjouterPays = connection.createStatement();
+			Statement requeteAjouterPays = connexion.createStatement();
 			
 			String sqlAjouterPays = "INSERT INTO pays(nom, continent, population, langue, capital) VALUES('"+ pays.getNom()+"','"+ pays.getContinent()+"','"+ pays.getPopulation()+"','"+ pays.getLangue()+"','"+ pays.getCapital()+"')";
 			System.out.println("SQL : " + sqlAjouterPays);
@@ -100,7 +73,7 @@ public class PaysDAO {
 		System.out.println("PaysDAO.modifierPays()");
 		
 		try {
-			Statement requeteModifierPays = connection.createStatement();
+			Statement requeteModifierPays = connexion.createStatement();
 			String SQL_MODIFIER_PAYS = "UPDATE pays SET nom = '"+ pays.getNom()+"', continent = '"+ pays.getContinent()+"', population = '"+ pays.getPopulation()+"', langue = '"+ pays.getLangue()+"', capital = '"+ pays.getCapital()+"' WHERE id = " + pays.getId();
 			System.out.println("SQL : " + SQL_MODIFIER_PAYS);
 			requeteModifierPays.execute(SQL_MODIFIER_PAYS);
@@ -114,7 +87,7 @@ public class PaysDAO {
 	{
 		Statement requetePays;
  		try {
- 			requetePays = connection.createStatement();
+ 			requetePays = connexion.createStatement();
  			
  			String SQL_RAPPORTER_PAYS = "SELECT * FROM pays WHERE id = " + idPays;
  			System.out.println(SQL_RAPPORTER_PAYS);
