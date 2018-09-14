@@ -27,6 +27,7 @@ public class VueEditerPays extends Scene {
     private ControleurPays controleur = null;
     protected Button actionEnregistrerPays = null;
     protected GridPane grilleListeLieu = new GridPane();
+    protected Button actionAjouterLieu = null;
 
 
     public VueEditerPays()  
@@ -34,8 +35,19 @@ public class VueEditerPays extends Scene {
         super(new VBox(), 400, 400);
         VBox panneau = (VBox) this.getRoot();
         GridPane grillePays = new GridPane();
-        this.actionEnregistrerPays = new Button("Enregistrer");
         
+        
+        this.actionAjouterLieu = new Button("Ajouter un lieu");
+        this.actionAjouterLieu.setOnAction(new EventHandler<ActionEvent>()
+        {
+        	@Override
+			public void handle(ActionEvent arg0) {
+				//controleur.notifierEnregistrementPays();
+        	}
+        });
+        
+        
+        this.actionEnregistrerPays = new Button("Enregistrer");
         this.actionEnregistrerPays.setOnAction(new EventHandler<ActionEvent>()
         {
         	@Override
@@ -69,6 +81,7 @@ public class VueEditerPays extends Scene {
         panneau.getChildren().add(grillePays);
         panneau.getChildren().add(this.actionEnregistrerPays);
         panneau.getChildren().add(grilleListeLieu);
+        panneau.getChildren().add(this.actionAjouterLieu);
     }
 
     public Pays demanderPays()
