@@ -2,6 +2,7 @@ package accesseur;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -24,11 +25,14 @@ public class LieuDAO {
  	{
  		System.out.println("LieuDAO.listerLieu()");
 		List<Lieu> listeLieu =  new ArrayList<Lieu>();			
-		Statement requeteListeLieu;
+		PreparedStatement requeteListeLieu;
+		
+		String SQL_LISTER_LIEU_PAR_PAYS = "SELECT * FROM lieu WHERE pays = ?";
 		
 		try {
-			requeteListeLieu = connexion.createStatement();
-			ResultSet curseurListeLieu = requeteListeLieu.executeQuery("SELECT * FROM lieu WHERE pays = " + idPays);
+			requeteListeLieu = connexion.prepareStatement(SQL_LISTER_LIEU_PAR_PAYS);
+			requeteListeLieu.setInt(1, idPays);
+			ResultSet curseurListeLieu = requeteListeLieu.executeQuery();
 			
 			while(curseurListeLieu.next())
 			{

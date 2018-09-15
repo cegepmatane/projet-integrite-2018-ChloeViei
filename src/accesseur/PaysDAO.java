@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaysDAO {
+public class PaysDAO implements PaysSQL {
 	
 	private Connection connexion = null;
     
@@ -23,7 +23,7 @@ public class PaysDAO {
 		
 		try {
         	requeteListePays = connexion.createStatement();
-            ResultSet curseurListePays = requeteListePays.executeQuery("SELECT * FROM pays");
+            ResultSet curseurListePays = requeteListePays.executeQuery(SQL_LISTER_PAYS);
 
             while (curseurListePays.next())
             {
@@ -55,9 +55,7 @@ public class PaysDAO {
 	public void ajouterPays(Pays pays)
 	{
 		System.out.println("PaysDAO.ajouterPays()");
-		try {
-			String SQL_AJOUTER_PAYS = "INSERT INTO pays(nom, continent, population, langue, capital) VALUES(?,?,?,?,?)";
-			
+		try {			
 			PreparedStatement requeteAjouterPays = connexion.prepareStatement(SQL_AJOUTER_PAYS);
 			requeteAjouterPays.setString(1, pays.getNom());
 			requeteAjouterPays.setString(2, pays.getContinent());
@@ -79,11 +77,19 @@ public class PaysDAO {
 		System.out.println("PaysDAO.modifierPays()");
 		
 		try 
-		{
-			Statement requeteModifierPays = connexion.createStatement();
-			String SQL_MODIFIER_PAYS = "UPDATE pays SET nom = '"+ pays.getNom()+"', continent = '"+ pays.getContinent()+"', population = '"+ pays.getPopulation()+"', langue = '"+ pays.getLangue()+"', capital = '"+ pays.getCapital()+"' WHERE id = " + pays.getId();
+		{			
+			PreparedStatement requeteModifierPays = connexion.prepareStatement(SQL_MODIFIER_PAYS);
+			
+			requeteModifierPays.setString(1, pays.getNom());
+			requeteModifierPays.setString(2, pays.getContinent());
+			requeteModifierPays.setString(3, pays.getPopulation());
+			requeteModifierPays.setString(4, pays.getLangue());
+			requeteModifierPays.setString(5, pays.getCapital());
+			requeteModifierPays.setInt(6, pays.getId());
+			
 			System.out.println("SQL : " + SQL_MODIFIER_PAYS);
-			requeteModifierPays.execute(SQL_MODIFIER_PAYS);
+			requeteModifierPays.execute();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -95,7 +101,6 @@ public class PaysDAO {
 		PreparedStatement requetePays;
  		try 
  		{ 	
- 			String SQL_RAPPORTER_PAYS = "SELECT * FROM pays WHERE id = ?";
 			requetePays = connexion.prepareStatement(SQL_RAPPORTER_PAYS);
 			requetePays.setInt(1, idPays);
  			
