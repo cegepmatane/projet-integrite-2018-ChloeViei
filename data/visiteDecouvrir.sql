@@ -1,14 +1,56 @@
--- SEQUENCE: public."idPays"
+ --
+ -- PostgreSQL database dump
+ --
+ 
+ -- Dumped from database version 9.6.4
+ -- Dumped by pg_dump version 9.6.4 
 
-CREATE TABLE distinction (
+
+ SET statement_timeout = 0;
+ SET lock_timeout = 0;
+ SET idle_in_transaction_session_timeout = 0;
+ SET client_encoding = 'UTF8';
+ SET standard_conforming_strings = on;
+ SET check_function_bodies = false;
+ SET client_min_messages = warning;
+ SET row_security = off;
+
+ 
+ --
+ -- Name: lieuDecouvrir; Type: DATABASE; Schema: -; Owner: postgres
+ --
+
+ ALTER DATABASE lieuDecouvrir OWNER TO postgres;
+
+ 
+--
+-- Name: journaliser(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+ CREATE FUNCTION journaliser() RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+	INSERT into journal(moment, operation, objet, description) VALUES(NOW(), 'AJOUTER', 'pays', '{France, francais}');
+END
+$$;
+ ALTER FUNCTION public.journaliser() OWNER TO postgres;
+
+ 
+ 
+ --
+ -- Name: lieu; Type: TABLE; Schema: public; Owner: postgres
+ --
+
+CREATE TABLE lieu (
     id integer NOT NULL,
-    nom integer,
-    adresse text,
+    nom text,
+    type text,
     detail text,
     pays integer
 );
 
-ALTER TABLE distinction OWNER TO postgres;
+ALTER TABLE lieu OWNER TO postgres;
 
 
 CREATE SEQUENCE lieu_id_seq
@@ -20,7 +62,7 @@ CREATE SEQUENCE lieu_id_seq
     
  ALTER TABLE lieu_id_seq OWNER TO postgres;
  
- ALTER SEQUENCE distinction_id_seq OWNED BY distinction.id;
+ ALTER SEQUENCE lieu_id_seq OWNED BY lieu.id;
  
 
 -- DROP SEQUENCE public."idPays";
@@ -36,21 +78,47 @@ ALTER TABLE pays_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE pays_id_seq OWNED BY pays.id;
 
--- Table: public.pays
 
--- DROP TABLE public.pays;
+--
+-- Name: journal; Type: TABLE; Schema: public; Owner: postgres
+--
 
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-SET search_path = public, pg_catalog;
+ CREATE TABLE journal (
+    id integer NOT NULL,
+    moment timestamp with time zone NOT NULL,
+    operation text NOT NULL,
+    description text,
+    objet text NOT NULL
+);
+ ALTER TABLE journal OWNER TO postgres;
  
-SET default_tablespace = '';
  
-SET default_with_oids = false;
+--
+-- Name: journal_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ CREATE SEQUENCE journal_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+ ALTER TABLE journal_id_seq OWNER TO postgres;
+ 
+--
+-- Name: journal_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ ALTER SEQUENCE journal_id_seq OWNED BY journal.id;
 
 
 
-CREATE TABLE public.pays
+
+--
+-- Name: pays; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE pays
 (
     nom text,
     continent text,
@@ -61,13 +129,33 @@ CREATE TABLE public.pays
 );
 
 
-ALTER TABLE public.pays OWNER to postgres;
+ALTER TABLE .pays OWNER to postgres;
+
+
+ --
+ -- Name: pays_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+ --
+ 
+ CREATE SEQUENCE pays_id_seq
+     START WITH 1
+     INCREMENT BY 1
+     NO MINVALUE
+     NO MAXVALUE
+     CACHE 1;
+ 
+ 
+ ALTER TABLE pays_id_seq OWNER TO postgres;
+ 
+ --
+ -- Name: pays_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+ --
+ 
+ ALTER SEQUENCE pays_id_seq OWNED BY pays.id;
 
 
 ALTER TABLE ONLY pays ALTER COLUMN id SET DEFAULT nextval('pays_id_seq'::regclass);
-
 ALTER TABLE ONLY lieu ALTER COLUMN id SET DEFAULT nextval('lieu_id_seq'::regclass);
-
+ALTER TABLE ONLY journam ALTER COLUMN id SET DEFAULT nextval('journal_id_seq'::regclass);
 
 
 INSERT INTO pays VALUES('France','Europe','67 millions','Francais','Paris');
@@ -81,24 +169,11 @@ ALTER TABLE ONLY pays
 ALTER TABLE ONLY lieu
     ADD CONSTRAINT lieu_pkey PRIMARY KEY (id);
     
+ALTER TABLE ONLY journal
+    ADD CONSTRAINT journal_pkey PRIMARY KEY (id);
+    
     
 CREATE INDEX fki_one_pays_to_many_lieu ON lieu USING btree (pays);
 
-ALTER TABLE ONLY distinction
+ALTER TABLE ONLY lieu
     ADD CONSTRAINT one_pays_to_many_lieu FOREIGN KEY (pays) REFERENCES pays(id);
-
-
-	
-	
-
-
-
-
-
-
-
-
-
-
-
-
