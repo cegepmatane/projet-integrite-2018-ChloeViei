@@ -27,11 +27,12 @@
 -- Name: journaliser(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
- CREATE FUNCTION journaliser() RETURNS void
+ CREATE FUNCTION journaliser() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
 	INSERT into journal(moment, operation, objet, description) VALUES(NOW(), 'AJOUTER', 'pays', '{France, francais}');
+	return NEW;
 END
 $$;
  ALTER FUNCTION public.journaliser() OWNER TO postgres;
@@ -174,6 +175,8 @@ ALTER TABLE ONLY journal
     
     
 CREATE INDEX fki_one_pays_to_many_lieu ON lieu USING btree (pays);
+
+CREATE TRIGGER evenementajouterpays BEFORE INSERT ON pays FOR EACH ROW EXECUTE PROCEDURE journaliser();
 
 ALTER TABLE ONLY lieu
     ADD CONSTRAINT one_pays_to_many_lieu FOREIGN KEY (pays) REFERENCES pays(id);
