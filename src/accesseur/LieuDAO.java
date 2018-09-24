@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modele.Lieu;
+import modele.Pays;
 
 
-public class LieuDAO {
+public class LieuDAO implements LieuSQL {
 	
 	private Connection connexion = null;
 	
@@ -26,8 +27,6 @@ public class LieuDAO {
  		System.out.println("LieuDAO.listerLieu()");
 		List<Lieu> listeLieu =  new ArrayList<Lieu>();			
 		PreparedStatement requeteListeLieu;
-		
-		String SQL_LISTER_LIEU_PAR_PAYS = "SELECT * FROM lieu WHERE pays = ?";
 		
 		try {
 			requeteListeLieu = connexion.prepareStatement(SQL_LISTER_LIEU_PAR_PAYS);
@@ -66,8 +65,25 @@ public class LieuDAO {
 		listeLieux.add(lieu);
 		lieu = new Lieu("Bora Bora", "Ile paradisiaque");
 		listeLieux.add(lieu); 
-		
 		return listeLieux;
+	}
+	
+	public void ajouterLieu(Lieu lieu)
+	{
+		System.out.println("LieuDAO.ajouterLieu()");
+		try {			
+			PreparedStatement requeteAjouterLieu = connexion.prepareStatement(SQL_AJOUTER_LIEU);
+			requeteAjouterLieu.setString(1, lieu.getNom());
+			requeteAjouterLieu.setString(2, lieu.getType());
+			requeteAjouterLieu.setString(3, lieu.getDetail());
+			requeteAjouterLieu.setInt(4, lieu.getPays());
+			
+			System.out.println("SQL : " + SQL_AJOUTER_LIEU);
+			requeteAjouterLieu.execute();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	

@@ -69,7 +69,6 @@ public class PaysDAO implements PaysSQL {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	public void modifierPays(Pays pays) 
