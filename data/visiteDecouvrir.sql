@@ -30,8 +30,21 @@
  CREATE FUNCTION journaliser() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
+DECLARE 
+	description text;
+	objetAvant text;
+	objetAprès text;
 BEGIN
-	INSERT into journal(moment, operation, objet, description) VALUES(NOW(), 'AJOUTER', 'pays', '{France, francais}');
+	
+	objetAvant := '';
+	objetApres := '';
+	
+	IF NEW IS NOT NULL THEN 
+		objetApres := '{'||NEW.nom||','||NEW.continent||','||NEW.population||','||NEW.langue||'}';
+	END IF;
+	
+	desciption := objetAvant || ' -> ' || objetApres;
+	INSERT into journal(moment, operation, objet, description) VALUES(NOW(), TG_OP, 'pays', description);
 	return NEW;
 END
 $$;
@@ -177,6 +190,9 @@ ALTER TABLE ONLY journal
 CREATE INDEX fki_one_pays_to_many_lieu ON lieu USING btree (pays);
 
 CREATE TRIGGER evenementajouterpays BEFORE INSERT ON pays FOR EACH ROW EXECUTE PROCEDURE journaliser();
+
+CREATE TRIGGER evenementmodifierpays BEFORE UPDATE ON pays FOR EACH ROW EXECUTE PROCEDURE journaliser();
+
 
 ALTER TABLE ONLY lieu
     ADD CONSTRAINT one_pays_to_many_lieu FOREIGN KEY (pays) REFERENCES pays(id);
