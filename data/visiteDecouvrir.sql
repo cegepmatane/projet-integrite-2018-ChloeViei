@@ -34,17 +34,30 @@ DECLARE
 	description text;
 	objetAvant text;
 	objetAprès text;
+	operation text;
 BEGIN
 	
 	objetAvant := '';
 	objetApres := '';
 	
-	IF NEW IS NOT NULL THEN 
-		objetApres := '{'||NEW.nom||','||NEW.continent||','||NEW.population||','||NEW.langue||'}';
+	IF TG_OP = 'UPDATE' THEN
+		objetAvant := '{'||OLD.nom||','||OLD.continent||','||OLD.population||','||OLD.langue||','||OLD.capital||'}';
+		objetApres := '{'||NEW.nom||','||NEW.continent||','||NEW.population||','||NEW.langue||','||NEW.capital||'}';
+		operation := 'MODIFIER';
+	END IF;
+	
+	IF TG_OP = 'INSERT' THEN
+		objetApres := '{'||NEW.nom||','||NEW.continent||','||NEW.population||','||NEW.langue||','||NEW.capital||'}';
+		operation := 'AJOUTER';
+	END IF;
+	
+	IF TG_OP = 'DELETE' THEN
+		objetAvant := '{'||OLD.nom||','||OLD.continent||','||OLD.population||','||OLD.langue||','||OLD.capital||'}';
+		operation := 'SUPPRIMER';
 	END IF;
 	
 	desciption := objetAvant || ' -> ' || objetApres;
-	INSERT into journal(moment, operation, objet, description) VALUES(NOW(), TG_OP, 'pays', description);
+	INSERT into journal(moment, operation, objet, description) VALUES(NOW(), operation, 'pays', description);
 	return NEW;
 END
 $$;
