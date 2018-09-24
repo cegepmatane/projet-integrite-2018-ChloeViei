@@ -47,17 +47,24 @@ BEGIN
 	END IF;
 	
 	IF TG_OP = 'INSERT' THEN
+		objetAvant := '{}';
 		objetApres := '{'||NEW.nom||','||NEW.continent||','||NEW.population||','||NEW.langue||','||NEW.capital||'}';
 		operation := 'AJOUTER';
 	END IF;
 	
 	IF TG_OP = 'DELETE' THEN
 		objetAvant := '{'||OLD.nom||','||OLD.continent||','||OLD.population||','||OLD.langue||','||OLD.capital||'}';
+		objetApres := '{}';
 		operation := 'SUPPRIMER';
 	END IF;
 	
 	desciption := objetAvant || ' -> ' || objetApres;
 	INSERT into journal(moment, operation, objet, description) VALUES(NOW(), operation, 'pays', description);
+	
+	IF TG_OP = 'DELETE' THEN
+		return OLD;
+	END IF;
+	
 	return NEW;
 END
 $$;
@@ -205,6 +212,8 @@ CREATE INDEX fki_one_pays_to_many_lieu ON lieu USING btree (pays);
 CREATE TRIGGER evenementajouterpays BEFORE INSERT ON pays FOR EACH ROW EXECUTE PROCEDURE journaliser();
 
 CREATE TRIGGER evenementmodifierpays BEFORE UPDATE ON pays FOR EACH ROW EXECUTE PROCEDURE journaliser();
+
+CREATE TRIGGER evenementeffacerpays BEFORE DELETE ON pays FOR EACH ROW EXECUTE PROCEDURE journaliser();
 
 
 ALTER TABLE ONLY lieu
