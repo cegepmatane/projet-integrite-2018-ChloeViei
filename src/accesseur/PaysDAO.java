@@ -78,7 +78,6 @@ public class PaysDAO implements PaysSQL {
 		try 
 		{			
 			PreparedStatement requeteModifierPays = connexion.prepareStatement(SQL_MODIFIER_PAYS);
-			
 			requeteModifierPays.setString(1, pays.getNom());
 			requeteModifierPays.setString(2, pays.getContinent());
 			requeteModifierPays.setString(3, pays.getPopulation());
@@ -88,6 +87,23 @@ public class PaysDAO implements PaysSQL {
 			
 			System.out.println("SQL : " + SQL_MODIFIER_PAYS);
 			requeteModifierPays.execute();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void supprimerPays(Pays pays) 
+	{
+		System.out.println("PaysDAO.supprimerPays()");
+		
+		try 
+		{			
+			PreparedStatement requeteSupprimerPays = connexion.prepareStatement(SQL_SUPPRIMER_PAYS);
+			requeteSupprimerPays.setInt(1, pays.getId());
+			
+			System.out.println("SQL : " + SQL_MODIFIER_PAYS);
+			requeteSupprimerPays.execute();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

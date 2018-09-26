@@ -86,6 +86,15 @@ public class ControleurPays {
     	this.navigateur.naviguerVersVueListePays();
     }
     
+    public void notifierSupprimerPays() 
+    {
+    	System.out.println("ControleurPays.notifierSupprimerPays()");
+    	Pays pays = this.navigateur.getVueEditerPays().demanderPays();
+    	this.paysDAO.supprimerPays(pays);
+    	this.vueListePays.afficherListePays(this.paysDAO.listerPays());
+    	this.navigateur.naviguerVersVueListePays();
+    }
+    
     public void notifierNaviguerAjouterPays() 
     {
     	// envoie un message à la console pour tester le bon fonctionnement de tout
