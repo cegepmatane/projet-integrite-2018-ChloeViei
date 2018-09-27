@@ -87,5 +87,72 @@ public class LieuDAO implements LieuSQL {
 	}
 	
 	
+	public void modifierLieu(Lieu lieu) 
+	{
+		System.out.println("LieuDAO.modifierLieu()");
+		
+		try 
+		{			
+			PreparedStatement requeteModifierLieu = connexion.prepareStatement(SQL_MODIFIER_LIEU);
+			requeteModifierLieu.setString(1, lieu.getNom());
+			requeteModifierLieu.setString(2, lieu.getType());
+			requeteModifierLieu.setString(3, lieu.getDetail());
+			requeteModifierLieu.setInt(4, lieu.getPays());
+			
+			System.out.println("SQL : " + SQL_MODIFIER_LIEU);
+			requeteModifierLieu.execute();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void supprimerLieu(Lieu lieu) 
+	{
+		System.out.println("LieuDAO.supprimerLieu()");
+		
+		try 
+		{			
+			PreparedStatement requeteSupprimerLieu = connexion.prepareStatement(SQL_SUPPRIMER_LIEU);
+			requeteSupprimerLieu.setInt(1, lieu.getId());
+			
+			System.out.println("SQL : " + SQL_SUPPRIMER_LIEU);
+			requeteSupprimerLieu.execute();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public Lieu rapporterLieu(int idLieu)
+	{
+		PreparedStatement requeteLieu;
+ 		try 
+ 		{ 	
+			requeteLieu = connexion.prepareStatement(SQL_RAPPORTER_LIEU);
+			requeteLieu.setInt(1, idLieu);
+ 			
+ 			System.out.println(SQL_RAPPORTER_LIEU);
+ 			ResultSet curseurLieu = requeteLieu.executeQuery();
+ 			
+ 			curseurLieu.next();
+ 			int id = curseurLieu.getInt("id");
+ 			String nom = curseurLieu.getString("nom");
+ 			String type = curseurLieu.getString("type");
+ 			String detail = curseurLieu.getString("detail");
+			
+ 			System.out.println("Lieu " + nom + " qui est un " + type + " : " + detail );
+ 			
+ 			Lieu lieu = new Lieu(nom, type, detail);
+			lieu.setId(id);
+ 			return lieu;
+ 			
+ 		} catch (SQLException e) {
+ 			e.printStackTrace();
+ 		}
+ 		return null;
+ 	}
+	
 
 }

@@ -3,6 +3,7 @@ package vue;
 import java.util.ArrayList;
 import java.util.List;
 
+import controleur.ControleurLieu;
 import controleur.ControleurPays;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,7 +25,8 @@ public class VueEditerPays extends Scene {
     protected TextField valeurCapital;
     private int idPays = 0;
     
-    private ControleurPays controleur = null;
+    private ControleurPays controleurPays = null;
+    private ControleurLieu controleurLieu = null;
     protected Button actionEnregistrerPays = null;
     protected GridPane grilleListeLieu = new GridPane();
     protected Button actionAjouterLieu = null;
@@ -33,7 +35,7 @@ public class VueEditerPays extends Scene {
 
     public VueEditerPays()  
     {
-        super(new VBox(), 400, 400);
+        super(new VBox(), 500, 500);
         VBox panneau = (VBox) this.getRoot();
         GridPane grillePays = new GridPane();
         
@@ -42,7 +44,7 @@ public class VueEditerPays extends Scene {
         {
         	@Override
 			public void handle(ActionEvent arg0) {
-				controleur.notifierSupprimerPays();
+        		controleurPays.notifierSupprimerPays();
         	}
         });
         
@@ -52,7 +54,7 @@ public class VueEditerPays extends Scene {
         {
         	@Override
 			public void handle(ActionEvent arg0) {
-				//controleur.notifierEnregistrementPays();
+				controleurLieu.notifierNaviguerAjouterLieu();
         	}
         });
         
@@ -62,7 +64,7 @@ public class VueEditerPays extends Scene {
         {
         	@Override
 			public void handle(ActionEvent arg0) {
-				controleur.notifierEnregistrementPays();
+        		controleurPays.notifierEnregistrementPays();
         	}
         });
 
@@ -130,8 +132,13 @@ public class VueEditerPays extends Scene {
 		}		
 	}
     
-    public void setControleur(ControleurPays controleur) 
+    public void setControleurPays(ControleurPays controleur) 
     {
-    	this.controleur = controleur;
+    	this.controleurPays = controleur;
+    }
+    
+    public void setControleurLieu(ControleurLieu controleur) 
+    {
+    	this.controleurLieu = controleur;
     }
 }

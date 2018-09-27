@@ -1,5 +1,6 @@
 package vue;
 
+import controleur.ControleurLieu;
 import controleur.ControleurPays;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -13,6 +14,9 @@ public class NavigateurDesVues extends Application{
 	private VueListePays vueListePays = null;
 	private VuePays vuePays = null;
 	private ControleurPays controleur = null;
+	private VueAjouterLieu vueAjouterLieu = null;
+	private VueEditerLieu vueEditerLieu = null;
+	private ControleurLieu controleurLieu = null;
 
 	
 	public NavigateurDesVues()
@@ -21,6 +25,8 @@ public class NavigateurDesVues extends Application{
 		this.vueListePays = new VueListePays();
 		this.vuePays = new VuePays();
 		this.vueEditerPays = new VueEditerPays();
+		this.vueAjouterLieu = new VueAjouterLieu();
+		this.vueEditerLieu = new VueEditerLieu();
 	}
 
 
@@ -36,7 +42,12 @@ public class NavigateurDesVues extends Application{
 		this.vueAjouterPays.setControleur(controleur);
 		this.vueListePays.setControleur(controleur);
 		this.vuePays.setControleur(controleur);
-		this.vueEditerPays.setControleur(controleur);
+		this.vueEditerPays.setControleurPays(controleur);
+		
+		this.controleurLieu = ControleurLieu.getInstance();
+		this.controleurLieu.activerVues(this);
+		this.vueAjouterLieu.setControleurLieu(controleurLieu);
+		this.vueEditerLieu.setControleurLieu(controleurLieu);
 	}
 
 	public VueAjouterPays getVueAjouterPays() {
@@ -75,6 +86,28 @@ public class NavigateurDesVues extends Application{
 	public void naviguerVersVueEditerPays()
 	{
 		stade.setScene(this.vueEditerPays);
+		stade.show();
+	}
+	
+	public VueAjouterLieu getVueAjouterLieu() 
+	{
+		return vueAjouterLieu;
+	}
+	
+	public void naviguerVersVueAjouterLieu()
+	{
+		stade.setScene(this.vueAjouterLieu);
+		stade.show();
+	}
+	
+	public VueEditerLieu getVueEditerLieu()
+	{
+		return this.vueEditerLieu;
+	}
+	
+	public void naviguerVersVueEditerLieu()
+	{
+		stade.setScene(this.vueEditerLieu);
 		stade.show();
 	}
 

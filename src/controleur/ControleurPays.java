@@ -25,7 +25,7 @@ public class ControleurPays {
 
     private ControleurPays()
     {
-        System.out.println("Initialisation de controleur");
+        System.out.println("Initialisation de controleurPays");
         this.paysDAO = new PaysDAO();
         lieuDAO = new LieuDAO();
     }
@@ -97,7 +97,6 @@ public class ControleurPays {
     
     public void notifierNaviguerAjouterPays() 
     {
-    	// envoie un message à la console pour tester le bon fonctionnement de tout
     	System.out.println("ControleurPays.notifierNaviguerAjouterPays()");
     	this.navigateur.naviguerVersVueAjouterPays();
     }
@@ -105,11 +104,10 @@ public class ControleurPays {
     public void notifierNaviguerEditerPays(int idPays)
 	{
 		System.out.println("ControleurPays.notifierEditerPays("+ idPays +")");
-		//Pays paysTest = new Pays("Allemagne","Europe","90 millions","Allemand","Berlin");
 		this.vueEditerPays.afficherPays(this.paysDAO.rapporterPays(idPays));
 		this.vueEditerPays.afficherListeLieu(this.lieuDAO.listerLieuParPays(idPays));     
 		this.navigateur.naviguerVersVueEditerPays();
-		
 	}
+   
 
 }
