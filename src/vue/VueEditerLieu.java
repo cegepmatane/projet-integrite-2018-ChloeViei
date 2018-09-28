@@ -1,8 +1,5 @@
 package vue;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import controleur.ControleurLieu;
 import controleur.ControleurPays;
 import javafx.event.ActionEvent;
@@ -14,7 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import modele.Lieu;
-import modele.Pays;
 
 public class VueEditerLieu extends Scene {
 
@@ -22,40 +18,17 @@ public class VueEditerLieu extends Scene {
     protected TextField valeurType;
     protected TextField valeurDetail;
     private int idPays = 0;
-    
-    private ControleurPays controleurPays = null;
+
     private ControleurLieu controleurLieu = null;
     protected Button actionEnregistrerLieu = null;
     protected GridPane grilleListeLieu = new GridPane();
     protected Button actionAjouterLieu = null;
-    protected Button actionSupprimerLieu = null;
-
 
     public VueEditerLieu()  
     {
         super(new VBox(), 500, 500);
         VBox panneau = (VBox) this.getRoot();
         GridPane grilleLieu = new GridPane();
-        
-        this.actionSupprimerLieu = new Button("Supprimer");
-        this.actionSupprimerLieu.setOnAction(new EventHandler<ActionEvent>()
-        {
-        	@Override
-			public void handle(ActionEvent arg0) {
-        		controleurLieu.notifierSupprimerLieu();
-        	}
-        });
-        
-        
-        this.actionAjouterLieu = new Button("Ajouter un lieu");
-        this.actionAjouterLieu.setOnAction(new EventHandler<ActionEvent>()
-        {
-        	@Override
-			public void handle(ActionEvent arg0) {
-				controleurLieu.notifierEnregistrementLieu();
-        	}
-        });
-        
         
         this.actionEnregistrerLieu = new Button("Enregistrer");
         this.actionEnregistrerLieu.setOnAction(new EventHandler<ActionEvent>()
@@ -81,9 +54,6 @@ public class VueEditerLieu extends Scene {
         panneau.getChildren().add(new Label("Editer un Lieu"));
         panneau.getChildren().add(grilleLieu);
         panneau.getChildren().add(this.actionEnregistrerLieu);
-        panneau.getChildren().add(this.actionSupprimerLieu);
-        panneau.getChildren().add(grilleListeLieu);
-        panneau.getChildren().add(this.actionAjouterLieu);
     }
 
     public Lieu demanderLieu()
@@ -103,19 +73,6 @@ public class VueEditerLieu extends Scene {
     	this.valeurDetail.setText(lieu.getDetail());
     }
     
-    public void afficherListeLieu(List<Lieu> listeLieux)
-	{
-		int numero = 0;
-		for(Lieu lieu : listeLieux)
-		{
-			this.grilleListeLieu.add(new Label(lieu.getNom() + ""), 0, numero);
-			this.grilleListeLieu.add(new Label(lieu.getType()), 1, numero);
-			this.grilleListeLieu.add(new Button("Éditer"), 2, numero);
-			this.grilleListeLieu.add(new Button("Effacer"), 3, numero);
-			
-			numero ++;
-		}		
-	}
     
     public void setControleurLieu(ControleurLieu controleur) 
     {

@@ -84,6 +84,8 @@ public class ControleurLieu {
     public void notifierNaviguerAjouterLieu() 
     {
     	System.out.println("ControleurLieu.notifierNaviguerAjouterLieu()");
+    	Pays pays = this.vueEditerPays.demanderPays();
+    	this.vueAjouterLieu.setPays(pays);
     	this.navigateur.naviguerVersVueAjouterLieu();
     }
     
@@ -91,7 +93,6 @@ public class ControleurLieu {
 	{
 		System.out.println("ControleurLieu.notifierNaviguerEditerLieu("+ idLieu +")");
 		this.vueEditerLieu.afficherLieu(this.lieuDAO.rapporterLieu(idLieu));
-		this.vueEditerLieu.afficherListeLieu(this.lieuDAO.listerLieuParPays(idLieu));     
 		this.navigateur.naviguerVersVueEditerLieu();
 	}
 

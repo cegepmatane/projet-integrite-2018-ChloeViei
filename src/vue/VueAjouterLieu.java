@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import modele.Lieu;
+import modele.Pays;
 
 public class VueAjouterLieu extends Scene {
 
@@ -19,6 +20,13 @@ public class VueAjouterLieu extends Scene {
     
     private ControleurLieu controleur = null;
     protected Button actionEnregistrerLieu = null;
+    
+    protected Pays pays;
+    
+    public void setPays(Pays pays) 
+    {
+    	this.pays = pays;
+    }
 
 
     public VueAjouterLieu()  
@@ -58,6 +66,7 @@ public class VueAjouterLieu extends Scene {
     	Lieu lieu = new Lieu(this.valeurNom.getText(),
                 this.valeurType.getText(),
                 this.valeurDetail.getText());
+    			lieu.setPays(pays.getId());
         return lieu;
     }
     

@@ -48,6 +48,7 @@ public class NavigateurDesVues extends Application{
 		this.controleurLieu.activerVues(this);
 		this.vueAjouterLieu.setControleurLieu(controleurLieu);
 		this.vueEditerLieu.setControleurLieu(controleurLieu);
+		this.vueEditerPays.setControleurLieu(controleurLieu);
 	}
 
 	public VueAjouterPays getVueAjouterPays() {

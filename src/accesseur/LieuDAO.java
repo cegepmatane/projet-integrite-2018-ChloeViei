@@ -97,7 +97,7 @@ public class LieuDAO implements LieuSQL {
 			requeteModifierLieu.setString(1, lieu.getNom());
 			requeteModifierLieu.setString(2, lieu.getType());
 			requeteModifierLieu.setString(3, lieu.getDetail());
-			requeteModifierLieu.setInt(4, lieu.getPays());
+			requeteModifierLieu.setInt(4, lieu.getId());
 			
 			System.out.println("SQL : " + SQL_MODIFIER_LIEU);
 			requeteModifierLieu.execute();

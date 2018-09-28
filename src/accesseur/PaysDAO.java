@@ -102,7 +102,11 @@ public class PaysDAO implements PaysSQL {
 			PreparedStatement requeteSupprimerPays = connexion.prepareStatement(SQL_SUPPRIMER_PAYS);
 			requeteSupprimerPays.setInt(1, pays.getId());
 			
-			System.out.println("SQL : " + SQL_MODIFIER_PAYS);
+			PreparedStatement requeteSupprimerLieuParPays = connexion.prepareStatement(SQL_SUPPRIMER_LIEU);
+			requeteSupprimerLieuParPays.setInt(1, pays.getId());
+			
+			System.out.println("SQL : " + SQL_SUPPRIMER_PAYS + " ainsi que : " + SQL_SUPPRIMER_LIEU);
+			requeteSupprimerLieuParPays.execute();
 			requeteSupprimerPays.execute();
 			
 		} catch (SQLException e) {

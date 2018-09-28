@@ -35,7 +35,7 @@ public class VueEditerPays extends Scene {
 
     public VueEditerPays()  
     {
-        super(new VBox(), 500, 500);
+        super(new VBox(), 700, 500);
         VBox panneau = (VBox) this.getRoot();
         GridPane grillePays = new GridPane();
         
@@ -104,7 +104,7 @@ public class VueEditerPays extends Scene {
                 this.valeurPopulation.getText(),
                 this.valeurLangue.getText(),
                 this.valeurCapital.getText());
-        pays.setId(idPays);
+        		pays.setId(idPays);
         return pays;
     }
     
@@ -120,13 +120,33 @@ public class VueEditerPays extends Scene {
     
     public void afficherListeLieu(List<Lieu> listeLieux)
 	{
-		int numero = 0;
+		int numero = 1;
+		this.grilleListeLieu.add(new Label("Liste des lieux :"), 0, 0);
+		
 		for(Lieu lieu : listeLieux)
 		{
-			this.grilleListeLieu.add(new Label(lieu.getNom() + ""), 0, numero);
-			this.grilleListeLieu.add(new Label(lieu.getType()), 1, numero);
-			this.grilleListeLieu.add(new Button("Éditer"), 2, numero);
-			this.grilleListeLieu.add(new Button("Effacer"), 3, numero);
+			Button actionEditerLieu = new Button("Editer");
+			actionEditerLieu.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    controleurLieu.notifierNaviguerEditerLieu(lieu.getId());
+                }
+            });
+			
+			Button actionSupprimerLieu = new Button("Supprimer");
+	        actionSupprimerLieu.setOnAction(new EventHandler<ActionEvent>()
+	        {
+	        	@Override
+				public void handle(ActionEvent arg0) {
+	        		controleurLieu.notifierSupprimerLieu();
+	        	}
+	        });
+            
+			this.grilleListeLieu.add(new Label(lieu.getNom() + " : "), 0, numero);
+			this.grilleListeLieu.add(new Label(lieu.getType() + "  "), 1, numero);
+			this.grilleListeLieu.add(new Label("("+ lieu.getDetail() + ")  "), 2, numero);
+			this.grilleListeLieu.add(actionEditerLieu, 3, numero);
+			this.grilleListeLieu.add(actionSupprimerLieu, 4, numero);
 			
 			numero ++;
 		}		
