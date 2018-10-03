@@ -38,6 +38,15 @@ public class VueEditerLieu extends Scene {
         		controleurLieu.notifierEnregistrementLieu();
         	}
         });
+        
+        Button actionSupprimerLieu = new Button("Supprimer");
+        actionSupprimerLieu.setOnAction(new EventHandler<ActionEvent>()
+        {
+        	@Override
+			public void handle(ActionEvent arg0) {
+        		controleurLieu.notifierSupprimerLieu();
+        	}
+        });
 
         valeurNom = new TextField();
         grilleLieu.add(new Label("Nom : "), 0, 0);
@@ -54,6 +63,7 @@ public class VueEditerLieu extends Scene {
         panneau.getChildren().add(new Label("Editer un Lieu"));
         panneau.getChildren().add(grilleLieu);
         panneau.getChildren().add(this.actionEnregistrerLieu);
+        panneau.getChildren().add(actionSupprimerLieu);
     }
 
     public Lieu demanderLieu()

@@ -144,10 +144,16 @@ DECLARE
 BEGIN
 	-- Réalise les insert a minuit tous les jours
 	SELECT cron.schedule('0 0 * * *', $$ INSERT INTO surveillancelieu(moment, nombrelieu, moyennesuperficie, checksumnom) 
-		VALUES(NOW(), (SELECT COUNT(id) FROM lieu),(SELECT AVG(superficie) FROM lieu), (SELECT MD5(string_agg(nom,'-')) FROM lieu))$$);
+					VALUES(NOW(), (SELECT COUNT(id) FROM lieu),(SELECT AVG(superficie) FROM lieu), 
+						 (SELECT MD5(string_agg(nom,'-')) FROM lieu))$$);
 	
 	SELECT cron.schedule('0 0 * * *', $$ INSERT INTO surveillancepays(moment, nombrepays, checksumnom) 
-		VALUES(NOW(), (SELECT COUNT(id) FROM lieu),(SELECT MD5(string_agg(nom,'-')) FROM lieu))$$);
+					VALUES(NOW(), (SELECT COUNT(id) FROM lieu),(SELECT MD5(string_agg(nom,'-')) FROM lieu))$$);
+															   
+	SELECT cron.schedule('0 0 * * *', $$ INSERT INTO surveillancelieuparpays(moment, nombrelieu, moyennesuperficie, checksumnom) 
+					VALUES(NOW(), (SELECT COUNT(lieu.id) FROM lieu INNER JOIN pays ON pays.id = lieu.pays), 
+			  			(SELECT AVG(lieu.superficie) FROM lieu INNER JOIN pays ON lieu.pays = pays.id), 
+			 			(SELECT MD5(string_agg(lieu.nom,'-')) FROM lieu INNER JOIN pays ON lieu.pays = pays.id));$$);																		  
 	
 	RETURN NEW;
 END
@@ -156,6 +162,74 @@ $_$;
 
 
 ALTER FUNCTION public.surveillance() OWNER TO postgres;
+
+--
+-- Name: surveillancelieu(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.surveillancelieu() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+
+BEGIN
+	
+	INSERT INTO surveillancelieu(moment, nombrelieu, moyennesuperficie, checksumnom) 
+	VALUES(NOW(), (SELECT COUNT(id) FROM lieu),(SELECT AVG(superficie) FROM lieu), (SELECT MD5(string_agg(nom,'-')) FROM lieu));
+
+	return NEW;
+END
+$$;
+
+
+ALTER FUNCTION public.surveillancelieu() OWNER TO postgres;
+
+--
+-- Name: surveillancelieuparpays(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.surveillancelieuparpays() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+
+BEGIN
+	
+	INSERT INTO surveillancelieuparpays(moment, nombrelieu, moyennesuperficie, checksumnom) 
+		VALUES(NOW(), (SELECT COUNT(lieu.id) FROM lieu INNER JOIN pays ON pays.id = lieu.pays), 
+		   (SELECT AVG(lieu.superficie) FROM lieu INNER JOIN pays ON lieu.pays = pays.id), 
+			(SELECT MD5(string_agg(lieu.nom,'-')) FROM lieu INNER JOIN pays ON lieu.pays = pays.id));
+			
+
+	return NEW;
+END
+$$;
+
+
+ALTER FUNCTION public.surveillancelieuparpays() OWNER TO postgres;
+
+--
+-- Name: surveillancepays(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.surveillancepays() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+
+DECLARE
+
+BEGIN
+	
+	INSERT INTO surveillancepays(moment, nombrepays, checksumnom) 
+	VALUES(NOW(), (SELECT COUNT(id) FROM pays),(SELECT MD5(string_agg(nom,'-')) FROM pays));
+
+	return NEW;
+END
+
+$$;
+
+
+ALTER FUNCTION public.surveillancepays() OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -430,13 +504,22 @@ INSERT INTO public.journal VALUES (47, '2018-09-28 16:54:18.035851-04', 'MODIFIE
 INSERT INTO public.journal VALUES (48, '2018-09-28 16:54:25.708085-04', 'AJOUTER', 'lieu', NULL);
 INSERT INTO public.journal VALUES (49, '2018-09-28 16:55:22.452206-04', 'MODIFIER', 'lieu', NULL);
 INSERT INTO public.journal VALUES (50, '2018-09-28 16:57:55.180521-04', 'MODIFIER', 'pays', '{Islande,Europe,,Islandais,Reykjavik} -> {Islande,Europe,300 000,Islandais,Reykjavik}');
+INSERT INTO public.journal VALUES (51, '2018-10-01 16:13:22.556675-04', 'MODIFIER', 'pays', '{Argentine,Amerique,43 millions,Espagnol,Buenos Aires} -> {Coree du Sud,Asie,51 millions,Coreen,Seoul}');
+INSERT INTO public.journal VALUES (52, '2018-10-01 16:18:21.264313-04', 'AJOUTER', 'pays', '{} -> {Australie,Oceanie,23 millions,Anglais,Canberra}');
+INSERT INTO public.journal VALUES (53, '2018-10-01 16:21:03.485325-04', 'MODIFIER', 'pays', '{Coree du Sud,Asie,51 millions,Coreen,Seoul} -> {Coree du Sud,Asie,51 millions,Coreen,Seoul}');
+INSERT INTO public.journal VALUES (54, '2018-10-01 16:21:48.829165-04', 'MODIFIER', 'pays', '{Allemagne,Europe,90 millions,Allemand,Berlin} -> {Allemagne,Europe,90 millions,Allemand,Berlin}');
+INSERT INTO public.journal VALUES (55, '2018-10-01 16:21:55.948526-04', 'MODIFIER', 'pays', '{Perou,Amerique,32 millions,Espagnol/Quechua/Aymara,Lima} -> {Perou,Amerique,32 millions,Espagnol/Quechua/Aymara,Lima}');
+INSERT INTO public.journal VALUES (56, '2018-10-01 16:45:37.099859-04', 'AJOUTER', 'lieu', NULL);
+INSERT INTO public.journal VALUES (57, '2018-10-01 16:45:43.410776-04', 'MODIFIER', 'pays', '{Lituanie,Europe,3 millions,Lituanien,Vilnius} -> {Lituanie,Europe,3 millions,Lituanien,Vilnius}');
+INSERT INTO public.journal VALUES (58, '2018-10-01 16:45:56.194581-04', 'MODIFIER', 'pays', '{Perou,Amerique,32 millions,Espagnol/Quechua/Aymara,Lima} -> {Perou,Amerique,32 millions,Espagnol/Quechua/Aymara,Lima}');
+INSERT INTO public.journal VALUES (59, '2018-10-01 16:52:11.082174-04', 'SUPPRIMER', 'lieu', NULL);
 
 
 --
 -- Name: journal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.journal_id_seq', 50, true);
+SELECT pg_catalog.setval('public.journal_id_seq', 59, true);
 
 
 --
@@ -449,40 +532,42 @@ INSERT INTO public.lieu VALUES (3, 'Machu Picchu', 'Citadelle Inca', '', 29, 325
 INSERT INTO public.lieu VALUES (6, 'Ushuaia', 'Ville astrale', '', 3, NULL);
 INSERT INTO public.lieu VALUES (16, 'Le Lac Myvatn', '', '', 35, NULL);
 INSERT INTO public.lieu VALUES (17, 'Blue Lagoon', 'Sources chandes', '', 35, NULL);
+INSERT INTO public.lieu VALUES (18, 'azerty', '', '', 24, NULL);
 
 
 --
 -- Name: lieu_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.lieu_id_seq', 17, true);
+SELECT pg_catalog.setval('public.lieu_id_seq', 18, true);
 
 
 --
 -- Data for Name: pays; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.pays VALUES ('Allemagne', 'Europe', '90 millions', 'Allemand', 'Berlin', 8);
-INSERT INTO public.pays VALUES ('Lituanie', 'Europe', '3 millions', 'Lituanien', 'Vilnius', 24);
-INSERT INTO public.pays VALUES ('Perou', 'Amerique', '32 millions', 'Espagnol/Quechua/Aymara', 'Lima', 29);
 INSERT INTO public.pays VALUES ('Croatie', 'Europe', '4 millions', 'Croate', 'Zagreb', 20);
 INSERT INTO public.pays VALUES ('Japon', 'Asie', '127 millions', 'Japonais', 'Tokyo', 30);
 INSERT INTO public.pays VALUES ('France', 'Europe', '67 millions', 'Francais', 'Paris', 4);
 INSERT INTO public.pays VALUES ('Mexique', 'Amerique', '124 millions', 'Espagnol', 'Mexico', 32);
 INSERT INTO public.pays VALUES ('Argentine', 'Amerique', '44 millions', 'Espagnol', 'Buenos Aires', 17);
-INSERT INTO public.pays VALUES ('Argentine', 'Amerique', '43 millions', 'Espagnol', 'Buenos Aires', 3);
 INSERT INTO public.pays VALUES ('Taiwan', 'Asie', '23 millions', 'Chinois', 'Taipei', 26);
 INSERT INTO public.pays VALUES ('Vietnam', 'Asie', 'rfer', 'Vietnamien', 'Hanoi', 11);
 INSERT INTO public.pays VALUES ('Venzuela', 'Amerique', '31 millions', 'Espagnol', 'Caracas', 28);
 INSERT INTO public.pays VALUES ('Egypte', 'Afrique', '94 millions', 'Arabe', 'Le Caire', 25);
 INSERT INTO public.pays VALUES ('Islande', 'Europe', '300 000', 'Islandais', 'Reykjavik', 35);
+INSERT INTO public.pays VALUES ('Australie', 'Oceanie', '23 millions', 'Anglais', 'Canberra', 36);
+INSERT INTO public.pays VALUES ('Coree du Sud', 'Asie', '51 millions', 'Coreen', 'Seoul', 3);
+INSERT INTO public.pays VALUES ('Allemagne', 'Europe', '90 millions', 'Allemand', 'Berlin', 8);
+INSERT INTO public.pays VALUES ('Lituanie', 'Europe', '3 millions', 'Lituanien', 'Vilnius', 24);
+INSERT INTO public.pays VALUES ('Perou', 'Amerique', '32 millions', 'Espagnol/Quechua/Aymara', 'Lima', 29);
 
 
 --
 -- Name: pays_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.pays_id_seq', 35, true);
+SELECT pg_catalog.setval('public.pays_id_seq', 36, true);
 
 
 --
@@ -490,13 +575,15 @@ SELECT pg_catalog.setval('public.pays_id_seq', 35, true);
 --
 
 INSERT INTO public.surveillancelieu VALUES (1, '2018-09-27', 4, 167, '91d6e5a196bf284b749e4e64ecb44911');
+INSERT INTO public.surveillancelieu VALUES (2, '2018-10-01', 6, 325, 'ce0734b2ab35bef99f47f7fb5cce5d17');
+INSERT INTO public.surveillancelieu VALUES (3, '2018-10-01', 7, 325, 'dcf9ce7a38ec0a9d98a6ae62de43f984');
 
 
 --
 -- Name: surveillancelieu_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.surveillancelieu_id_seq', 1, true);
+SELECT pg_catalog.setval('public.surveillancelieu_id_seq', 3, true);
 
 
 --
@@ -504,13 +591,14 @@ SELECT pg_catalog.setval('public.surveillancelieu_id_seq', 1, true);
 --
 
 INSERT INTO public.surveillancelieuparpays VALUES (12, '2018-09-27', 4, 167, '91d6e5a196bf284b749e4e64ecb44911');
+INSERT INTO public.surveillancelieuparpays VALUES (13, '2018-10-01', 6, 325, 'ce0734b2ab35bef99f47f7fb5cce5d17');
 
 
 --
 -- Name: surveillancelieuparpays_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.surveillancelieuparpays_id_seq', 12, true);
+SELECT pg_catalog.setval('public.surveillancelieuparpays_id_seq', 13, true);
 
 
 --
@@ -518,13 +606,20 @@ SELECT pg_catalog.setval('public.surveillancelieuparpays_id_seq', 12, true);
 --
 
 INSERT INTO public.surveillancepays VALUES (1, '2018-09-27', 13, 'aa3ae14dd6548b5c8c29fa06b60b463e');
+INSERT INTO public.surveillancepays VALUES (2, '2018-10-01', 6, 'ce0734b2ab35bef99f47f7fb5cce5d17');
+INSERT INTO public.surveillancepays VALUES (3, '2018-10-01', 14, '18ebd463577b8f48a8034c61b6923994');
+INSERT INTO public.surveillancepays VALUES (4, '2018-10-01', 15, '8f40007c30b5aca50e41228412c36b4d');
+INSERT INTO public.surveillancepays VALUES (5, '2018-10-01', 15, 'a5feaa253b14988122bbd70621372455');
+INSERT INTO public.surveillancepays VALUES (6, '2018-10-01', 15, '8c1350ee776644d17949e7042ce76b13');
+INSERT INTO public.surveillancepays VALUES (7, '2018-10-01', 15, '39ac880fb9f041aa35ebb387eba5f38f');
+INSERT INTO public.surveillancepays VALUES (8, '2018-10-01', 15, '59f74986bac06d00ca6f899fa9eabd29');
 
 
 --
 -- Name: surveillancepays_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.surveillancepays_id_seq', 1, true);
+SELECT pg_catalog.setval('public.surveillancepays_id_seq', 8, true);
 
 
 --
@@ -622,6 +717,27 @@ CREATE TRIGGER evenementmodifierlieu BEFORE UPDATE ON public.lieu FOR EACH ROW E
 --
 
 CREATE TRIGGER evenementmodifierpays BEFORE UPDATE ON public.pays FOR EACH ROW EXECUTE PROCEDURE public.journaliser();
+
+
+--
+-- Name: lieu surveillance; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER surveillance BEFORE INSERT OR DELETE OR UPDATE ON public.lieu FOR EACH ROW EXECUTE PROCEDURE public.surveillancelieu();
+
+
+--
+-- Name: pays surveillance; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER surveillance BEFORE INSERT OR DELETE OR UPDATE ON public.pays FOR EACH ROW EXECUTE PROCEDURE public.surveillancepays();
+
+
+--
+-- Name: lieu surveillancelieuparpays; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER surveillancelieuparpays BEFORE INSERT OR DELETE OR UPDATE ON public.lieu FOR EACH ROW EXECUTE PROCEDURE public.surveillancelieuparpays();
 
 
 --
